@@ -1,3 +1,4 @@
+import { normalizeResearchPost } from '../shared/research.mjs';
 import { shippingFeeSatang, SHIPPING_POLICY_VERSION } from '../shared/shipping.mjs';
 import { initializeApp } from 'firebase/app';
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut, GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail } from 'firebase/auth';
@@ -50,6 +51,7 @@ async function demoApi(path,method,data){
  else if(path==='/admin/product'){const i=memory.products.findIndex(p=>p.id===data.id);if(i>=0)memory.products[i]=clone(data);else memory.products.push({...clone(data),id:crypto.randomUUID()});}
  else if(path==='/admin/settings')memory.settings={...clone(data),shippingPolicyVersion:SHIPPING_POLICY_VERSION};
  else if(path==='/posts'){memory.posts.unshift({...clone(data),id:crypto.randomUUID(),status:'pending',authorName:'สมาชิกตัวอย่าง',createdAt:new Date().toISOString()});}
+ else if(path==='/admin/research-post'){const old=memory.posts.find(p=>p.id===data.id);const record={...normalizeResearchPost({...data,image:''}),image:data.image||'',id:old?.id||crypto.randomUUID(),authorName:'ทีมเบียงวิก้า',createdAt:old?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};if(old)Object.assign(old,record);else memory.posts.unshift(record);}
  else if(path==='/admin/post'){memory.posts.unshift({...clone(data),id:crypto.randomUUID(),status:data.publish?'published':'draft',authorName:'ทีมจากสวนของเรา',createdAt:new Date().toISOString()});}
  else if(path==='/admin/moderate'){const p=memory[data.collection].find(p=>p.id===data.id);if(p)p.status=data.status;}
  else if(path.startsWith('/comments?'))return clone(memory.comments.filter(c=>c.postId===new URLSearchParams(path.split('?')[1]).get('postId')&&c.status==='published'));

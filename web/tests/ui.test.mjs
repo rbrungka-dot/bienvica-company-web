@@ -12,3 +12,31 @@ test('shop email settings are admin-only and demo cannot send email',async()=>{
  w.location.hash='/login';await ready(w,()=>d.querySelector('[data-action="demo-admin"]'));d.querySelector('[data-action="demo-admin"]').click();await ready(w,()=>d.querySelector('#content-form'));
  w.location.hash='/admin/orders';await ready(w,()=>d.querySelector('#notification-test'));assert.match(d.body.textContent,/thanakrittum@gmail.com/);assert.match(d.body.textContent,/ยังไม่พร้อมส่ง/);assert.equal(d.querySelector('#notification-test button').disabled,true);dom.window.close();
 });
+
+test('research QR destination exposes evidence, exact graph and native FAQ without buying or downloading unpublished report',async()=>{
+ const {dom,w,d,errors}=await setup();w.requestAnimationFrame=fn=>fn();w.HTMLElement.prototype.scrollIntoView=function(){this.dataset.scrolled='true'};
+ w.location.hash='/research?section=shot';await ready(w,()=>d.querySelector('#research-shot'));
+ assert.equal(d.querySelector('#research-shot').dataset.scrolled,'true');
+ assert.match(d.body.textContent,/สนับสนุนโดย สกว\./);
+ assert.match(d.body.textContent,/0.27/);assert.match(d.body.textContent,/2.89/);assert.match(d.body.textContent,/0.75/);
+ assert.equal(d.querySelector('.research-graph img').getAttribute('src'),'/assets/research-transport.png');
+ assert.equal(d.querySelectorAll('.research-faq details').length,5);
+ assert.equal(d.querySelector('#research-shot [href*="cart"]'),null);
+ assert.equal(d.querySelector('a[href$=".pptx"]'),null);
+ assert.equal(d.querySelector('#research-form'),null);
+ assert.equal(errors.length,0);dom.window.close();
+});
+test('admin can draft, publish, edit and unpublish a Facebook research entry; filters and public text stay safe',async()=>{
+ const {dom,w,d}=await setup();w.requestAnimationFrame=fn=>fn();w.HTMLElement.prototype.scrollIntoView=()=>{};
+ w.location.hash='/admin/research';await ready(w,()=>d.querySelector('.empty'));assert.equal(d.querySelector('#research-form'),null);
+ w.location.hash='/login';await ready(w,()=>d.querySelector('[data-action="demo-admin"]'));d.querySelector('[data-action="demo-admin"]').click();await ready(w,()=>d.querySelector('#content-form'));
+ w.location.hash='/admin/research?id=new';await ready(w,()=>d.querySelector('#research-form'));
+ const submit=async publish=>{const form=d.querySelector('#research-form'),button=form.querySelector(`[value="${publish}"]`);form.dispatchEvent(new w.SubmitEvent('submit',{bubbles:true,cancelable:true,submitter:button}));await ready(w,()=>!d.querySelector('#research-form'));};
+ for(const [key,value] of Object.entries({category:'facebook',title:'<img src=x onerror=alert(1)> กุหลาบ',summary:'เรื่องใหม่จากทีม',body:'เนื้อหาใหม่',sourceURL:'https://www.facebook.com/Bienvica/posts/123'}))d.querySelector(`[name="${key}"]`).value=value;
+ await submit('no');w.location.hash='/research?section=library';await ready(w,()=>d.querySelector('.research-library'));assert.equal(d.querySelectorAll('.research-library-card').length,0);
+ w.location.hash='/admin/research';await ready(w,()=>d.querySelector('.admin-list a'));d.querySelector('.admin-list a').click();await ready(w,()=>d.querySelector('#research-form'));assert.equal(d.querySelector('[name="sourceURL"]').value,'https://www.facebook.com/Bienvica/posts/123');await submit('yes');
+ w.location.hash='/research?section=library&category=facebook';await ready(w,()=>d.querySelector('.research-library-card'));assert.equal(d.querySelector('.research-library-card h3 img'),null);assert.equal(d.querySelectorAll('.research-library-card').length,1);
+ d.querySelector('.research-library-card a').click();await ready(w,()=>d.querySelector('.research-article'));assert.match(d.querySelector('.research-article-body').textContent,/เนื้อหาใหม่/);
+ assert.equal(d.querySelector('.research-article a[target="_blank"]').getAttribute('rel'),'noopener noreferrer');
+ w.location.hash='/admin/research';await ready(w,()=>d.querySelector('.admin-list a'));d.querySelector('.admin-list a').click();await ready(w,()=>d.querySelector('#research-form'));await submit('no');w.location.hash='/research?section=library';await ready(w,()=>d.querySelector('.research-library'));assert.equal(d.querySelectorAll('.research-library-card').length,0);dom.window.close();
+});
