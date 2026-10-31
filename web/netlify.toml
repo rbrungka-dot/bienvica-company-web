@@ -11,6 +11,14 @@
   to = "/.netlify/functions/api/:splat"
   status = 200
 [[redirects]]
+  from = "/research/shot"
+  to = "/#/research?section=shot"
+  status = 302
+[[redirects]]
+  from = "/research"
+  to = "/#/research"
+  status = 302
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

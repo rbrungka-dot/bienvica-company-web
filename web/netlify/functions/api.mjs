@@ -1,3 +1,4 @@
+import { normalizeResearchPost } from '../../shared/research.mjs';
 import {erpEnabled,erpConfiguration,erpRequest,mappedLines,syncERPOrder,flushERPOrders,withERPStock} from '../../shared/erp-client.mjs';
 import { emailConfiguration, paidOrderNotification, deliverOrderEmail, flushOrderEmails, sendEmail } from '../../shared/order-email.mjs';
 import { shippingFeeSatang, SHIPPING_POLICY_VERSION } from '../../shared/shipping.mjs';
@@ -166,6 +167,12 @@ export default async function handler(req){
       const b=await body(req);requireValue(['posts','comments'].includes(b.collection)&&['published','rejected'].includes(b.status));const ref=db.doc(b.collection+'/'+docId(b.id)),snap=await ref.get();if(!snap.exists)throw new HttpError(404,'ไม่พบโพสต์');let image=snap.data().image||'';
       if(b.collection==='posts'&&b.status==='published'&&snap.data().imagePath&&!image){const token=randomUUID(),path='public/community/'+snap.id;const bucket=getStorage().bucket();await bucket.file(snap.data().imagePath).copy(bucket.file(path));await bucket.file(path).setMetadata({metadata:{firebaseStorageDownloadTokens:token}});image=`https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(path)}?alt=media&token=${token}`;}
       await ref.update({status:b.status,image,moderatedBy:u.uid});return json({success:true});
+    }
+    if(path==='/admin/research-post'&&req.method==='POST'){
+      const b=await body(req);let record;try{record=normalizeResearchPost(b)}catch(error){throw new HttpError(400,error.message)}
+      const id=docId(b.id||randomUUID()),ref=db.doc('posts/'+id),old=await ref.get();
+      if(old.exists&&old.data().placement!=='research')throw new HttpError(400,'รายการนี้ไม่ใช่เนื้อหาในคลังงานวิจัย');
+      await ref.set({...record,authorUid:u.uid,authorName:'ทีมเบียงวิก้า',createdAt:old.data()?.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()},{merge:true});return json({success:true,id});
     }
     if(path==='/admin/post'&&req.method==='POST'){const b=await body(req);requireValue(['team','ask','review','ideas'].includes(b.kind));requireValue(['all','Bienvica','B-time','Xactu-X'].includes(b.brand));const id=docId(b.id||randomUUID());await db.doc('posts/'+id).set({title:text(b.title,200),body:text(b.body,6000),kind:b.kind,brand:b.brand,authorUid:u.uid,authorName:'ทีมจากสวนของเรา',status:b.publish?'published':'draft',createdAt:new Date().toISOString()},{merge:true});return json({success:true});}
     if(path==='/admin/poll'&&req.method==='POST'){const b=await body(req);requireValue(Array.isArray(b.options)&&b.options.length>=2&&b.options.length<=6);const options=b.options.map(o=>text(o,100));requireValue(new Set(options).size===options.length);const batch=db.batch(),old=await db.collection('polls').where('active','==',true).get();old.docs.forEach(d=>batch.update(d.ref,{active:false}));batch.set(db.collection('polls').doc(),{title:text(b.title,200),options,active:true});await batch.commit();return json({success:true});}
