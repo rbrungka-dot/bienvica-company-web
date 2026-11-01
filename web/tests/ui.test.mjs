@@ -1,4 +1,5 @@
 import {test} from 'node:test';
+import {readFile} from 'node:fs/promises';
 import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 import {JSDOM,VirtualConsole} from 'jsdom';
@@ -17,15 +18,17 @@ test('research QR destination exposes evidence, exact graph and native FAQ witho
  const {dom,w,d,errors}=await setup();w.requestAnimationFrame=fn=>fn();w.HTMLElement.prototype.scrollIntoView=function(){this.dataset.scrolled='true'};
  w.location.hash='/research?section=shot';await ready(w,()=>d.querySelector('#research-shot'));
  assert.equal(d.querySelector('#research-shot').dataset.scrolled,'true');
- assert.match(d.body.textContent,/สนับสนุนโดย สกว\./);
+ assert.match(await readFile('public/research-graphs/transport.html','utf8'),/สนับสนุนโดย สกว\./);
+ assert.match(await readFile('public/research-graphs/glp1.html','utf8'),/Metformin/);
  assert.match(d.body.textContent,/0.27/);assert.match(d.body.textContent,/2.89/);assert.match(d.body.textContent,/0.75/);
  assert.equal(d.querySelector('.research-graph img').getAttribute('src'),'/assets/research-transport-styled.png');
  assert.equal(d.querySelectorAll('.research-faq details').length,6);
  assert.equal(d.querySelector('.glp1-graph img').getAttribute('src'),'/assets/research-glp1-styled.png');
  assert.equal(d.querySelectorAll('.shot-gda .gda-item').length,4);
- assert.equal(d.querySelectorAll('.graph-key').length,2);
- assert.match(d.querySelector('.graph-key').textContent,/Phlorizin/);
- assert.match(d.querySelector('.graph-key').textContent,/Phloretin/);
+ assert.equal(d.querySelectorAll('.graph-key').length,0);
+ assert.equal(d.querySelector('.research-graph').getAttribute('href'),'/research-graphs/transport.html');
+ assert.equal(d.querySelector('.glp1-graph').getAttribute('href'),'/research-graphs/glp1.html');
+ assert.equal(d.querySelectorAll('.transport .graph-caption').length,0);
  assert.equal(d.querySelector('a[href$=".pdf"]'),null);
  assert.match(d.body.textContent,/3,970/);
  assert.equal(d.querySelector('#research-shot [href*="cart"]'),null);
