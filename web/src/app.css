@@ -71,3 +71,28 @@ footer{padding:35px 4.5%;background:var(--cream);font-size:12px;line-height:1.9}
 
 /* Brand cards: original logos replace repeated lifestyle scenes. */
 .home-editorial .brand-logo-visual{display:flex;align-items:center;justify-content:center;background:#fff;padding:34px;aspect-ratio:1.65}.home-editorial .brand-logo-visual img{width:100%;height:100%;max-width:300px;max-height:145px;object-fit:contain}.home-editorial .brand-thai-name{font-family:'Noto Sans Thai',Tahoma,sans-serif;font-size:26px;font-weight:500;line-height:1.5;color:#243c2c;margin:0 0 18px}.home-editorial .brand-copy{padding-top:25px}@media(max-width:700px){.home-editorial .brand-logo-visual{padding:30px;aspect-ratio:1.85}.home-editorial .brand-logo-visual img{max-height:130px;max-width:280px}.home-editorial .brand-thai-name{font-size:24px;margin-bottom:14px}}
+
+/* Integrated research illustrations, with generous mobile image space. */
+.shot-experience .antioxidant-layout{grid-template-columns:230px minmax(0,1fr);gap:24px;align-items:center;margin:22px 0}
+.shot-experience .antioxidant-art{height:270px;object-fit:cover;object-position:center;border-radius:18px;align-self:center}
+.shot-experience .enzyme{display:grid;grid-template-columns:230px minmax(0,1fr);gap:0 24px}
+.shot-experience .enzyme-copy{display:contents}
+.shot-experience .enzyme h3,.shot-experience .enzyme-copy>p{grid-column:1/-1}
+.shot-experience .enzyme-data{grid-column:2;grid-row:3;margin:22px 0 0;padding:0}
+.shot-experience .enzyme figure{position:static;grid-column:1;grid-row:3;width:100%;margin:22px 0 0;align-self:center;background:#fbf0e5;border-radius:18px;overflow:hidden}
+.shot-experience .enzyme img{display:block;width:100%;height:270px;object-fit:contain}
+.shot-experience .enzyme figcaption{font-size:11px;padding:0 12px 10px;color:#74665d}
+@media(max-width:650px){
+.shot-experience .antioxidant-layout{grid-template-columns:1fr;gap:16px;margin:18px 0}
+.shot-experience .antioxidant-art{width:100%;height:230px;object-position:center 55%}
+.shot-experience .enzyme{grid-template-columns:minmax(0,1fr);gap:0}
+.shot-experience .enzyme figure{grid-column:1;grid-row:3;margin-top:18px;display:block}
+.shot-experience .enzyme img{width:100%;height:230px}
+.shot-experience .enzyme-data{grid-column:1;grid-row:4;margin-top:16px}
+.shot-experience .evidence-values>div{padding:16px 8px}
+.shot-experience .evidence-values span,.shot-experience .enzyme-data .evidence-values span{font-size:14px}
+.shot-experience .evidence-values strong,.shot-experience .enzyme-data .evidence-values strong{font-size:44px}
+.shot-experience .research-note,.shot-experience .enzyme-data>.research-note{font-size:12px}
+.shot-experience .enzyme-data>p,.shot-experience details p{font-size:14px;line-height:1.8}
+.shot-experience summary{font-size:14px}
+}

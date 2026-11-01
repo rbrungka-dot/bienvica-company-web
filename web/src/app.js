@@ -25,7 +25,7 @@ const footer=()=>`<footer><div>${img('/assets/logo-bienvica.webp','BIENVICA')}<p
 function productCard(p){return `<article class="product"><a href="#/product/${e(p.id)}"><div class="product-picture">${img(p.image,p.name)}</div></a><div class="eyebrow">${e(p.brand)}</div><h3>${e(p.name)}</h3><p>${e(p.description)}</p><div class="price">${baht(p.priceSatang)}</div><a class="button" href="#/product/${e(p.id)}">ดูรายละเอียด ↗</a></article>`;}
 function home(){
  const c=data.content;
- const brandThaiNames=['เบียงวิก้า','บีทาม','แคคตู้เอ็กซ์'];
+ const brandThaiNames=['เบียงวิก้า','บีทาม','แคคตูเอ็กซ์'];
  return `<div class="home-editorial">
  <section class="hero" aria-labelledby="home-title">
   <div class="hero-copy"><div class="eyebrow">OUR ROOTS, YOUR EVERYDAY</div><h1 id="home-title">${e(c.hero.title)}</h1><p>${e(c.hero.body)}</p><a class="button" href="#/about">${e(c.hero.button)}</a><div class="hero-origin"><span>SAKON NAKHON, THAILAND</span><span>เริ่มต้นจากคนปลูก · ตั้งแต่ปี 2551</span></div></div>

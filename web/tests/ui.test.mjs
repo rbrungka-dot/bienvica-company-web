@@ -30,7 +30,7 @@ test('research QR destination exposes evidence, exact graph and native FAQ witho
  assert.equal(d.querySelector('.glp1-graph').getAttribute('href'),'/research-graphs/glp1.html');
  assert.equal(d.querySelectorAll('.transport .graph-caption').length,0);
  assert.equal(d.querySelector('a[href$=".pdf"]'),null);
- assert.match(d.body.textContent,/3,970/);
+ assert.match(d.body.textContent,/ทุก 100 มล. มีเบียงวิก้า 0.75 มล./);
  assert.equal(d.querySelector('#research-shot [href*="cart"]'),null);
  assert.equal(d.querySelector('a[href$=".pptx"]'),null);
  assert.equal(d.querySelector('#research-form'),null);
