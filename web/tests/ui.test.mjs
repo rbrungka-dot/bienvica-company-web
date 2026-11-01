@@ -20,7 +20,11 @@ test('research QR destination exposes evidence, exact graph and native FAQ witho
  assert.match(d.body.textContent,/สนับสนุนโดย สกว\./);
  assert.match(d.body.textContent,/0.27/);assert.match(d.body.textContent,/2.89/);assert.match(d.body.textContent,/0.75/);
  assert.equal(d.querySelector('.research-graph img').getAttribute('src'),'/assets/research-transport.png');
- assert.equal(d.querySelectorAll('.research-faq details').length,5);
+ assert.equal(d.querySelectorAll('.research-faq details').length,6);
+ assert.equal(d.querySelector('.glp1-graph img').getAttribute('src'),'/assets/research-glp1.png');
+ assert.equal(d.querySelectorAll('.gda-item').length,4);
+ assert.equal(d.querySelector('a[href$=".pdf"]'),null);
+ assert.match(d.body.textContent,/3,970/);
  assert.equal(d.querySelector('#research-shot [href*="cart"]'),null);
  assert.equal(d.querySelector('a[href$=".pptx"]'),null);
  assert.equal(d.querySelector('#research-form'),null);
