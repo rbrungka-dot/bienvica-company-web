@@ -1,0 +1,14 @@
+import { build } from 'esbuild';
+import { cp, mkdir, rm, writeFile } from 'node:fs/promises';
+await rm('dist', { recursive: true, force: true });
+await mkdir('dist', { recursive: true });
+await cp('public', 'dist', { recursive: true });
+const keys = { apiKey:'FIREBASE_API_KEY', authDomain:'FIREBASE_AUTH_DOMAIN', projectId:'FIREBASE_PROJECT_ID', storageBucket:'FIREBASE_STORAGE_BUCKET', appId:'FIREBASE_APP_ID' };
+const firebase = Object.fromEntries(Object.entries(keys).map(([key, env]) => [key, process.env[env] || '']));
+const mode = process.env.APP_MODE || 'demo';
+if (!['demo', 'live'].includes(mode)) throw Error('APP_MODE must be demo or live');
+if (mode === 'live' && Object.values(firebase).some(v => !v)) throw Error('Missing public Firebase configuration');
+await writeFile('dist/config.js', `window.BIENVICA_CONFIG=${JSON.stringify({ mode, firebase })};\n`);
+await build({ entryPoints:['src/app.js'], bundle:true, minify:true, outdir:'dist', format:'esm', target:['es2022'], sourcemap:false });
+await cp('src/app.css', 'dist/app.css');
+console.log(`Built dist/ in ${mode} mode. No server secrets included.`);

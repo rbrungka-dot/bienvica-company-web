@@ -1,0 +1,26 @@
+name: Bienvica commerce checks
+on:
+  pull_request:
+    paths: ['web/**', '.github/workflows/commerce-checks.yml']
+  push:
+    branches: [codex/firebase-company-rebuild]
+    paths: ['web/**', '.github/workflows/commerce-checks.yml']
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --ignore-scripts --no-audit --no-fund
+      - run: npm test
+      - run: npm run build
+      - name: Ensure bridge secrets stay out of client bundle
+        run: '! rg "ERP_BRIDGE_SECRET|ERP_FIREBASE_SERVICE_ACCOUNT_JSON|private_key" dist/app.js dist/config.js'
