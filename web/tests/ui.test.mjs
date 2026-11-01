@@ -50,3 +50,13 @@ test('admin can draft, publish, edit and unpublish a Facebook research entry; fi
  assert.equal(d.querySelector('.research-article a[target="_blank"]').getAttribute('rel'),'noopener noreferrer');
  w.location.hash='/admin/research';await ready(w,()=>d.querySelector('.admin-list a'));d.querySelector('.admin-list a').click();await ready(w,()=>d.querySelector('#research-form'));await submit('no');w.location.hash='/research?section=library';await ready(w,()=>d.querySelector('.research-library'));assert.equal(d.querySelectorAll('.research-library-card').length,0);dom.window.close();
 });
+
+test('full graph pages load external styles under production CSP',async()=>{
+ for(const slug of ['transport','glp1']){
+  const page=await readFile(`public/research-graphs/${slug}.html`,'utf8');
+  assert.match(page,/href="\/research-graphs\/details\.css/);
+  assert.doesNotMatch(page,/<style[ >]/i);
+  assert.match(page,/class="chart-panel"/);
+ }
+ assert.match(await readFile('public/research-graphs/details.css','utf8'),/@font-face/);
+});
