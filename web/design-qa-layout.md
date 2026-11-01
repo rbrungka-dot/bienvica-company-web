@@ -22,3 +22,14 @@ Comparison inputs: /workspace/scratch/bienvica-hero-comparison.jpg; /workspace/s
 Nutrition open/close tested at desktop and 390px; native accordion and original graph links preserved. Existing 38 tests and build passed. Browser logs showed extension metadata errors only, no application errors observed. Responsive checks use real 390px and 1024px nested browser viewports, not physical devices. Small original GLP-1 raster resolution remains a source limitation.
 
 final result: passed
+
+
+## Readability revision after user mobile feedback
+Source: IMG_6432.jpeg / IMG_6433.png attached 2026-11-01. User rejected scaled GDA text and asked for graph colours and visible abbreviation keys.
+P1 correction: below 700px GDA reflows to full width within the opening section. Labels are fixed 12px semibold, values 28px bold, heading 14px, footnote 11px. Above 700px it remains beneath the hero icons, with fixed readable black text on near-white panels. This responsive reflow is intentional to prioritize legibility over squeezing four columns into 37% of a phone screen.
+Browser evidence: /workspace/scratch/bienvica-gda-readable-mobile.jpg (390px iframe; inspected font 12px and value 28px), /workspace/scratch/bienvica-gda-strong-hero-final.jpg (desktop), /workspace/scratch/bienvica-graph-key-readable.jpg (coloured transport graph and always-visible key). Comparison: /workspace/scratch/bienvica-gda-readability-comparison.jpg viewed side by side with prior mobile result. No app errors observed; previous extension metadata noise excluded.
+Graph styling changes existing pixels only, retaining dimensions, data coordinates, error bars and significance marks. Controls are gray, ACV purple, cactus green, BVC rose and MET blue. Reproducible script: scripts/style-research-charts.py; original images remain unchanged in public/assets.
+PZ/Phlorizin and PT/Phloretin definitions verified in report slides 13-15 and 17. Both graph keys now always visible, with relevant units. CR is described as control without inventing an expanded English acronym.
+FDA source checked: https://food.fda.moph.go.th/faqs/gda-44 — physical packaging label text must be clear and at least 1mm. This does not establish website certification; browser sizing is an independent usability choice.
+Fonts, spacing, colour, copy, source-asset fidelity and native enlargement interaction rechecked. Existing 38 tests and production build pass.
+final result: passed
