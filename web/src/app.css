@@ -96,3 +96,6 @@ footer{padding:35px 4.5%;background:var(--cream);font-size:12px;line-height:1.9}
 .shot-experience .enzyme-data>p,.shot-experience details p{font-size:14px;line-height:1.8}
 .shot-experience summary{font-size:14px}
 }
+
+.shot-experience .antioxidant-art{mix-blend-mode:normal;object-position:center 42%}
+@media(max-width:650px){.shot-experience .antioxidant-art{object-position:center 42%}}
